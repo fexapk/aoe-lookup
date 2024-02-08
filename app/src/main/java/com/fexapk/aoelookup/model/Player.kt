@@ -6,5 +6,5 @@ data class Player(
     val steamId: String,
     val country: String,
     val lastGameAt: String,
-    val leaderboards: Leaderboards?
+    val leaderboards: Leaderboards
 )

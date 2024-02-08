@@ -3,7 +3,7 @@ package com.fexapk.aoelookup.model
 data class RmSolo(
     val rating: Int,
     val rank: Int,
-    val rankLevel: String?,
+    val rankLevel: String,
     val streak: Int,
     val gamesCount: Int,
     val winsCount: Int,
