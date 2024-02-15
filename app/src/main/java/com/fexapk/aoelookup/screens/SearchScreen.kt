@@ -49,7 +49,7 @@ fun SearchScreen(modifier: Modifier = Modifier) {
             UiState.ERROR -> ErrorBox(boxModifier)
             UiState.LOADING -> LoadingBox(boxModifier)
             UiState.SUCCESS -> PlayerList(
-                players = viewModel.players.collectAsState().value,
+                players = viewModel.players,
                 modifier = boxModifier
             )
         }

@@ -17,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,7 +40,7 @@ fun PlayerCard(
         ) {
             Image(
                 painter = painterResource(
-                    RankDrawable.getRankDrawable(player.leaderboards.rmSolo?.rankLevel ?: "no rank")
+                    RankDrawable.getRankDrawable(player.leaderboards.rmSolo?.rankLevel ?: "no_rank")
                 ),
                 contentDescription = null,
                 modifier = Modifier.size(70.dp)
@@ -140,7 +141,7 @@ fun getDefaultPlayer(): Player {
         rmSolo = RmSolo(
             rating = 900,
             rank = 123,
-            rankLevel = "gold_2",
+            rankLevel = "conqueror_2",
             streak = 3,
             gamesCount = 50,
             winsCount = 30,
@@ -157,7 +158,7 @@ fun getDefaultPlayer(): Player {
         name = "John Doe",
         profileId = 123456,
         steamId = "765611987654321",
-        country = "US",
+        country = "us",
         lastGameAt = "2024-02-03T12:45:00.000Z",
         leaderboards = leaderboards
     )
