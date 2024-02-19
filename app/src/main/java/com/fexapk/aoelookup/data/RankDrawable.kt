@@ -23,7 +23,6 @@ object RankDrawable {
         "bronze_3" to R.drawable.bronze_three,
         "bronze_2" to R.drawable.bronze_two,
         "bronze_1" to R.drawable.bronze_one,
-        "no_rank" to R.drawable.no_rank
     )
 
     @DrawableRes

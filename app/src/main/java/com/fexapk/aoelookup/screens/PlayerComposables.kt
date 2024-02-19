@@ -16,8 +16,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,6 +27,7 @@ import com.fexapk.aoelookup.data.RankDrawable
 import com.fexapk.aoelookup.model.Leaderboards
 import com.fexapk.aoelookup.model.Player
 import com.fexapk.aoelookup.model.RmSolo
+import com.fexapk.aoelookup.ui.theme.AoeLookUpTheme
 
 @Composable
 fun PlayerCard(
@@ -34,17 +35,34 @@ fun PlayerCard(
     modifier: Modifier = Modifier
 ) {
 
-    Card {
+    val unranked = "unranked"
+    val rankLevel: String = player.leaderboards.rmSolo?.rankLevel ?: unranked
+
+    Card(
+        modifier = Modifier.height(80.dp)
+    ) {
         Row(
+            verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
         ) {
-            Image(
-                painter = painterResource(
-                    RankDrawable.getRankDrawable(player.leaderboards.rmSolo?.rankLevel ?: "no_rank")
-                ),
-                contentDescription = null,
-                modifier = Modifier.size(70.dp)
-            )
+            if (rankLevel == unranked) {
+                Image(
+                    painter = painterResource(id = R.drawable.no_rank),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(60.dp)
+                        .padding(8.dp)
+                )
+            } else {
+
+                val rankDrawableResource = RankDrawable.getRankDrawable(rankLevel)
+
+                Image(
+                    painter = painterResource(rankDrawableResource),
+                    contentDescription = null,
+                    modifier = Modifier.size(70.dp)
+                )
+            }
             PlayerInformation(
                 player = player
             )
@@ -58,10 +76,10 @@ fun PlayerInformation(
     modifier: Modifier = Modifier
 ) {
 
-    val playerRank = player.leaderboards.rmSolo?.rank ?: 0
+    val rank = player.leaderboards.rmSolo?.rank ?: 0
 
     Column(
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
         modifier = modifier
     ) {
         Row(
@@ -78,7 +96,7 @@ fun PlayerInformation(
         )
         Spacer(modifier = Modifier.height(2.dp))
         Text(
-            text = "# $playerRank",
+            text = stringResource(id = R.string.player_rank, rank),
             style = MaterialTheme.typography.bodySmall
         )
     }
@@ -90,7 +108,8 @@ fun PlayerList(players: List<Player>?, modifier: Modifier = Modifier) {
         NoPlayersFoundBox(Modifier.fillMaxSize())
     } else {
         LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(4.dp)
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+            modifier = modifier
         ) {
             items(players) { player ->
                 PlayerCard(
@@ -105,7 +124,6 @@ fun PlayerList(players: List<Player>?, modifier: Modifier = Modifier) {
 
 }
 
-@Preview(showBackground = true)
 @Composable
 fun NoPlayersFoundBox(modifier: Modifier = Modifier) {
     CenteredBox(modifier = modifier) {
@@ -119,13 +137,30 @@ fun NoPlayersFoundBox(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 fun PlayerCardPreview() {
-    PlayerCard(
-        player = getDefaultPlayer(),
+    AoeLookUpTheme {
+        val player = getDefaultPlayer()
+        PlayerCard(
+            player = player,
+            modifier = Modifier.padding(8.dp)
+        )
+    }
+}
 
+@Preview
+@Composable
+fun PlayerNoRankPreview() {
+
+    val player = getNoRankPlayer()
+
+    PlayerCard(
+        player = player,
         modifier = Modifier.padding(8.dp)
     )
 }
 
+/**
+ * Returns the flag emoji to the corresponding two uppercase letters iso 3166 country code
+ */
 fun isoCountryCodeToEmojiFlag(isoCode: String?): String {
 
     if (isoCode == null) return "\u2753"
@@ -141,7 +176,7 @@ fun getDefaultPlayer(): Player {
         rmSolo = RmSolo(
             rating = 900,
             rank = 123,
-            rankLevel = "conqueror_2",
+            rankLevel = "conqueror_3",
             streak = 3,
             gamesCount = 50,
             winsCount = 30,
@@ -153,6 +188,20 @@ fun getDefaultPlayer(): Player {
             season = 6
         )
     )
+
+    return Player(
+        name = "John Doe",
+        profileId = 123456,
+        steamId = "765611987654321",
+        country = "us",
+        lastGameAt = "2024-02-03T12:45:00.000Z",
+        leaderboards = leaderboards
+    )
+}
+
+fun getNoRankPlayer() : Player {
+
+    val leaderboards = Leaderboards(rmSolo = null)
 
     return Player(
         name = "John Doe",

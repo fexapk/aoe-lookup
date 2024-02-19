@@ -4,18 +4,23 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.fexapk.aoelookup.R
@@ -44,6 +50,7 @@ fun SearchScreen(modifier: Modifier = Modifier) {
                 viewModel.searchPlayers(it)
             }
         )
+        Spacer(modifier = Modifier.height(8.dp))
         when(viewModel.uiState) {
             UiState.HOME -> HomeBox(boxModifier)
             UiState.ERROR -> ErrorBox(boxModifier)
@@ -66,13 +73,18 @@ fun SearchBar(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        TextField(
+        OutlinedTextField(
             value = query,
             onValueChange = { onQueryChange(it) },
             placeholder = { Text(text = "Search player...") },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            shape = RoundedCornerShape(16.dp),
             modifier = Modifier
                 .weight(1f)
-                .padding(horizontal = 8.dp)
+                .padding(horizontal = 4.dp)
         )
     }
 }
@@ -86,7 +98,7 @@ fun CenteredBox(modifier: Modifier = Modifier, content: @Composable () -> Unit) 
         content()
     }
 }
-@Preview
+
 @Composable
 fun LoadingBox(modifier: Modifier = Modifier) {
     CenteredBox(
@@ -100,7 +112,6 @@ fun LoadingBox(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun HomeBox(modifier: Modifier = Modifier) {
     CenteredBox(modifier = modifier) {
@@ -114,7 +125,6 @@ fun HomeBox(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun ErrorBox(modifier: Modifier = Modifier) {
     CenteredBox(modifier = modifier) {
