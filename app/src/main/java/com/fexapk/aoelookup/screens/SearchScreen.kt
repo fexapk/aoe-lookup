@@ -16,10 +16,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -57,7 +55,7 @@ fun SearchScreen(modifier: Modifier = Modifier) {
             UiState.LOADING -> LoadingBox(boxModifier)
             UiState.SUCCESS -> PlayerList(
                 players = viewModel.players,
-                modifier = boxModifier
+                modifier = Modifier.padding(8.dp)
             )
         }
     }
@@ -82,6 +80,9 @@ fun SearchBar(
                 imeAction = ImeAction.Done
             ),
             shape = RoundedCornerShape(16.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = MaterialTheme.colorScheme.tertiary
+            ),
             modifier = Modifier
                 .weight(1f)
                 .padding(horizontal = 4.dp)

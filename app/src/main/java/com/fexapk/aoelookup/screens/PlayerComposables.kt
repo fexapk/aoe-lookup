@@ -12,16 +12,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.fexapk.aoelookup.R
 import com.fexapk.aoelookup.data.RankDrawable
 import com.fexapk.aoelookup.model.Leaderboards
@@ -35,17 +37,16 @@ fun PlayerCard(
     modifier: Modifier = Modifier
 ) {
 
-    val unranked = "unranked"
-    val rankLevel: String = player.leaderboards.rmSolo?.rankLevel ?: unranked
+    val rankLevel: String = player.leaderboards.rmSolo?.rankLevel ?: "unranked"
 
-    Card(
+    OutlinedCard(
         modifier = Modifier.height(80.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
         ) {
-            if (rankLevel == unranked) {
+            if (rankLevel == "unranked") {
                 Image(
                     painter = painterResource(id = R.drawable.no_rank),
                     contentDescription = null,
@@ -79,25 +80,22 @@ fun PlayerInformation(
     val rank = player.leaderboards.rmSolo?.rank ?: 0
 
     Column(
-        verticalArrangement = Arrangement.Top,
+        verticalArrangement = Arrangement.Center,
         modifier = modifier
     ) {
-        Row(
-            horizontalArrangement = Arrangement.End,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = isoCountryCodeToEmojiFlag(player.country)
-            )
-        }
         Text(
             text = player.name,
             style = MaterialTheme.typography.titleMedium
         )
-        Spacer(modifier = Modifier.height(2.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.small_spacer_height)))
         Text(
             text = stringResource(id = R.string.player_rank, rank),
             style = MaterialTheme.typography.bodySmall
+        )
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.small_spacer_height)))
+        Text(
+            text = isoCountryCodeToEmojiFlag(player.country),
+            fontSize = 12.sp
         )
     }
 }
@@ -108,7 +106,8 @@ fun PlayerList(players: List<Player>?, modifier: Modifier = Modifier) {
         NoPlayersFoundBox(Modifier.fillMaxSize())
     } else {
         LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(4.dp),
+            verticalArrangement = Arrangement
+                .spacedBy(dimensionResource(id = R.dimen.player_list_spacing)),
             modifier = modifier
         ) {
             items(players) { player ->
@@ -116,7 +115,7 @@ fun PlayerList(players: List<Player>?, modifier: Modifier = Modifier) {
                     player = player,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp)
+                        .padding(dimensionResource(id = R.dimen.medium_card_padding))
                 )
             }
         }

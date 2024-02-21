@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Aoe Look up</string>
+    <string name="app_name">Aoe Lookup</string>
     <string name="no_players_found">No Players Found</string>
     <string name="player_rank">rank: %s</string>
 </resources>
