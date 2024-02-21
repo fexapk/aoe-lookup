@@ -13,6 +13,15 @@ val lightSurface = Color(0xFFF8F9FA)
 val lightOnSurface = Color(0xFF6C757D)
 val lightSurfaceVariant = Color(0xFFADB5BD)
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+val darkPrimary = Color(0xFFDEE2E6)
+val darkSecondary = Color(0xFFE9ECEF)
+val darkTertiary =  Color(0xFFF8F9FA)
+val darkError = Color(0xFFFF0000)
+val darkOnPrimary = Color(0xFF343A40)
+val darkOnSecondary = Color(0xFF495057)
+val darkOnTertiary = Color(0xFF6C757D)
+val darkSurface = Color(0xFF212529)
+val darkOnSurface = Color(0xFFCED4DA)
+val darkSurfaceVariant = Color(0xFFADB5BD)
+
+

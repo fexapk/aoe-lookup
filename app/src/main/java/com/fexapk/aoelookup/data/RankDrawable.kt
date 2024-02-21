@@ -27,7 +27,6 @@ object RankDrawable {
 
     @DrawableRes
     fun getRankDrawable(rank: String) : Int {
-        val drawable = rankDrawableMap.get(rank)
-        return if (drawable == null) R.drawable.no_rank else drawable
+        return rankDrawableMap.get(rank) ?: R.drawable.no_rank
     }
 }

@@ -1,13 +1,11 @@
 package com.fexapk.aoelookup.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -35,10 +33,10 @@ import com.fexapk.aoelookup.R
 @Composable
 fun SearchScreen(modifier: Modifier = Modifier) {
 
-    val boxModifier = Modifier.fillMaxSize()
-
     val viewModel = remember { AoeViewModel() }
     var playerQuery by remember { mutableStateOf("") }
+
+    val boxModifier = Modifier.fillMaxSize()
 
     Column(modifier = modifier) {
         SearchBar(
@@ -46,16 +44,17 @@ fun SearchScreen(modifier: Modifier = Modifier) {
             onQueryChange = {
                 playerQuery = it
                 viewModel.searchPlayers(it)
-            }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
         )
-        Spacer(modifier = Modifier.height(8.dp))
         when(viewModel.uiState) {
             UiState.HOME -> HomeBox(boxModifier)
             UiState.ERROR -> ErrorBox(boxModifier)
             UiState.LOADING -> LoadingBox(boxModifier)
             UiState.SUCCESS -> PlayerList(
                 players = viewModel.players,
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.fillMaxSize().padding(8.dp)
             )
         }
     }
@@ -67,27 +66,20 @@ fun SearchBar(
     onQueryChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        OutlinedTextField(
-            value = query,
-            onValueChange = { onQueryChange(it) },
-            placeholder = { Text(text = "Search player...") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Done
-            ),
-            shape = RoundedCornerShape(16.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MaterialTheme.colorScheme.tertiary
-            ),
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 4.dp)
-        )
-    }
+    OutlinedTextField(
+        value = query,
+        onValueChange = { onQueryChange(it) },
+        placeholder = { Text(text = "Search player...") },
+        singleLine = true,
+        keyboardOptions = KeyboardOptions.Default.copy(
+            imeAction = ImeAction.Done
+        ),
+        shape = RoundedCornerShape(16.dp),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = MaterialTheme.colorScheme.secondary
+        ),
+        modifier = modifier
+    )
 }
 
 @Composable
@@ -115,9 +107,13 @@ fun LoadingBox(modifier: Modifier = Modifier) {
 
 @Composable
 fun HomeBox(modifier: Modifier = Modifier) {
+
+    val isDark = isSystemInDarkTheme()
+    val imageResource = if (isDark) R.drawable.roman_four_white else R.drawable.roman_four
+
     CenteredBox(modifier = modifier) {
         Image(
-            painter = painterResource(id = R.drawable.roman_four),
+            painter = painterResource(imageResource),
             contentDescription = null,
             modifier = Modifier
                 .size(120.dp)

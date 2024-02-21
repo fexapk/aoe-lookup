@@ -1,6 +1,7 @@
 package com.fexapk.aoelookup.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -46,30 +47,36 @@ fun PlayerCard(
             verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
         ) {
-            if (rankLevel == "unranked") {
-                Image(
-                    painter = painterResource(id = R.drawable.no_rank),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(60.dp)
-                        .padding(8.dp)
-                )
-            } else {
-
-                val rankDrawableResource = RankDrawable.getRankDrawable(rankLevel)
-
-                Image(
-                    painter = painterResource(rankDrawableResource),
-                    contentDescription = null,
-                    modifier = Modifier.size(70.dp)
-                )
-            }
+            RankedIcon(rankLevel = rankLevel)
             PlayerInformation(
                 player = player
             )
         }
     }
 }
+
+@Composable
+fun RankedIcon(rankLevel: String) {
+
+    val isSystemDark = isSystemInDarkTheme()
+    val isUnranked = rankLevel == "unranked"
+
+    val unrankedIconResource = if (isSystemDark) R.drawable.no_rank_white else R.drawable.no_rank
+    val rankedIconResource = if (isUnranked) unrankedIconResource
+        else RankDrawable.getRankDrawable(rankLevel)
+
+    val imageModifier = if (isUnranked) Modifier
+        .size(60.dp)
+        .padding(8.dp)
+        else Modifier.size(70.dp)
+
+    Image(
+        painter = painterResource(rankedIconResource),
+        contentDescription = null,
+        modifier = imageModifier
+    )
+}
+
 
 @Composable
 fun PlayerInformation(

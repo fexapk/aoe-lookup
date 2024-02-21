@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    SearchScreen(Modifier.fillMaxSize().padding(8.dp))
+                    SearchScreen(Modifier.fillMaxSize().padding(12.dp))
                 }
             }
         }
