@@ -25,12 +25,12 @@ enum class UiState {
 
 sealed interface UiState {
     data class Success(val players: List<Player>) : UiState
+
+    data class PlayerFocus(val player: Player) : UiState
     object Error : UiState
     object Loading : UiState
     object Home : UiState
 }
-
-
 
 class AoeViewModel : ViewModel() {
 
@@ -56,4 +56,9 @@ class AoeViewModel : ViewModel() {
              }
          }
     }
+
+    fun focusPlayer(player: Player) {
+       uiState = UiState.PlayerFocus(player)
+    }
+
 }

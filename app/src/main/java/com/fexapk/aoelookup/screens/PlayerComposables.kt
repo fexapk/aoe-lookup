@@ -36,8 +36,8 @@ import androidx.compose.ui.unit.sp
 import com.fexapk.aoelookup.R
 import com.fexapk.aoelookup.data.RankDrawable
 import com.fexapk.aoelookup.model.Leaderboards
-import com.fexapk.aoelookup.model.Player
 import com.fexapk.aoelookup.model.MatchInfo
+import com.fexapk.aoelookup.model.Player
 import com.fexapk.aoelookup.ui.theme.AoeLookUpTheme
 
 @Composable
@@ -56,7 +56,6 @@ fun PlayerCard(
 
     OutlinedCard(
         modifier = Modifier
-            .clickable { isTouched = !isTouched }
             .alpha(alphaValue)
             .height(80.dp)
     ) {
@@ -82,7 +81,9 @@ fun RankedIcon(player: Player) {
 
     val drawableRes: Int = RankDrawable.getRankDrawable(rankLevel) ?: unrankedRes
 
-    val imageModifier = if (drawableRes == unrankedRes) Modifier.size(60.dp).padding(8.dp)
+    val imageModifier = if (drawableRes == unrankedRes) Modifier
+        .size(60.dp)
+        .padding(8.dp)
         else Modifier.size(70.dp)
 
     Image(
@@ -128,39 +129,6 @@ fun PlayerInformation(
         Text(
             text = getEmojiFromIsoCountryCode(player.country),
             fontSize = 12.sp
-        )
-    }
-}
-
-@Composable
-fun PlayerList(players: List<Player>?, modifier: Modifier = Modifier) {
-    if (players.isNullOrEmpty()) {
-        NoPlayersFoundBox(Modifier.fillMaxSize())
-    } else {
-        LazyColumn(
-            verticalArrangement = Arrangement
-                .spacedBy(dimensionResource(id = R.dimen.player_list_spacing)),
-            modifier = modifier
-        ) {
-            items(players) { player ->
-                PlayerCard(
-                    player = player,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(dimensionResource(id = R.dimen.medium_card_padding))
-                )
-            }
-        }
-    }
-
-}
-
-@Composable
-fun NoPlayersFoundBox(modifier: Modifier = Modifier) {
-    CenteredBox(modifier = modifier) {
-        Text(
-            text = stringResource(R.string.no_players_found),
-            style = MaterialTheme.typography.titleMedium
         )
     }
 }
