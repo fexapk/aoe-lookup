@@ -14,40 +14,45 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
-
+/**
 enum class UiState {
     SUCCESS,
     ERROR,
     LOADING,
     HOME
 }
+**/
+
+sealed interface UiState {
+    data class Success(val players: List<Player>) : UiState
+    object Error : UiState
+    object Loading : UiState
+    object Home : UiState
+}
+
+
 
 class AoeViewModel : ViewModel() {
 
     private val playerRepository: PlayerRepository = NetworkPlayerRepository
     private var searchJob: Job? = null
 
-    var uiState: UiState by mutableStateOf(UiState.HOME)
-
-    var players: List<Player> = emptyList()
-        private set
-
+    var uiState: UiState by mutableStateOf(UiState.Home)
 
      fun searchPlayers(username: String) {
          searchJob?.cancel()
          searchJob = viewModelScope.launch {
-            uiState = UiState.LOADING
+            uiState = UiState.Loading
              try {
                  delay(300) // Debounce time
                  val players = playerRepository.searchPlayers(username)
-                 if (isActive) { // Ensures coroutine is still active
-                     this@AoeViewModel.players = players
-                     uiState = UiState.SUCCESS
+                 if (isActive) { // Ensures coroutine is still active layers
+                     uiState = UiState.Success(players)
                  }
              } catch (e: IOException) {
-                 uiState = UiState.ERROR
+                 uiState = UiState.Error
              } catch (e: HttpException) {
-                 uiState = UiState.ERROR
+                 uiState = UiState.Error
              }
          }
     }

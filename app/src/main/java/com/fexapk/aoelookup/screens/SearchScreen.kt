@@ -4,8 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -34,6 +36,8 @@ import com.fexapk.aoelookup.R
 fun SearchScreen(modifier: Modifier = Modifier) {
 
     val viewModel = remember { AoeViewModel() }
+    val currentState = viewModel.uiState
+
     var playerQuery by remember { mutableStateOf("") }
 
     val boxModifier = Modifier.fillMaxSize()
@@ -48,14 +52,12 @@ fun SearchScreen(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .fillMaxWidth()
         )
-        when(viewModel.uiState) {
-            UiState.HOME -> HomeBox(boxModifier)
-            UiState.ERROR -> ErrorBox(boxModifier)
-            UiState.LOADING -> LoadingBox(boxModifier)
-            UiState.SUCCESS -> PlayerList(
-                players = viewModel.players,
-                modifier = Modifier.fillMaxSize().padding(8.dp)
-            )
+        Spacer(Modifier.height(4.dp))
+        when(currentState) {
+            is UiState.Home -> HomeBox(boxModifier)
+            is UiState.Error -> ErrorBox(boxModifier)
+            is UiState.Loading -> LoadingBox(boxModifier)
+            is UiState.Success -> PlayerList(currentState.players)
         }
     }
 }
