@@ -2,4 +2,12 @@
     <string name="app_name">Aoe Lookup</string>
     <string name="no_players_found">No Players Found</string>
     <string name="player_rank">rank: %s</string>
+    <string name="rating">rating</string>
+    <string name="rank">rank</string>
+    <string name="streak">streak</string>
+    <string name="season">season</string>
+    <string name="games">games</string>
+    <string name="wins">wins</string>
+    <string name="loses">loses</string>
+    <string name="win_rate">win rate</string>
 </resources>
