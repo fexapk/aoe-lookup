@@ -1,7 +1,7 @@
 package com.fexapk.aoelookup.model
 
 import com.google.gson.annotations.SerializedName
-data class MatchInfo(
+data class MatchData(
     val rating: Int,
     val rank: Int,
     val streak: Int,

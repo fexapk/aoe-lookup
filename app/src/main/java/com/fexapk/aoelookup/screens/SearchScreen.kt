@@ -1,5 +1,6 @@
 package com.fexapk.aoelookup.screens
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -37,6 +38,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.fexapk.aoelookup.R
+import com.fexapk.aoelookup.model.Leaderboards
 import com.fexapk.aoelookup.model.Player
 
 @Composable
@@ -64,13 +66,13 @@ fun SearchScreen(modifier: Modifier = Modifier) {
             is UiState.Home -> HomeBox(boxModifier)
             is UiState.Error -> ErrorBox(boxModifier)
             is UiState.Loading -> LoadingBox(boxModifier)
+            is UiState.PlayerFocus -> MatchDataList(currentState.player.leaderboards)
             is UiState.Success -> PlayerList(
                 players = currentState.players,
                 cardOnClick = {
                     viewModel.focusPlayer(it)
                 }
             )
-            is UiState.PlayerFocus -> Text(text = "Hello world")
         }
     }
 }
@@ -104,7 +106,10 @@ fun PlayerList(
     cardOnClick: (Player) -> Unit = {}
 ) {
     if (players.isNullOrEmpty()) {
-        NoPlayersFoundBox(Modifier.fillMaxSize())
+        NoPlayersFoundBox(
+            R.string.no_players_found,
+            Modifier.fillMaxSize()
+        )
     } else {
         LazyColumn(
             verticalArrangement = Arrangement
@@ -121,6 +126,46 @@ fun PlayerList(
                         }
                         .padding(dimensionResource(id = R.dimen.medium_card_padding)),
                 )
+            }
+        }
+    }
+}
+
+@Composable
+fun MatchDataList(
+    leaderboards: Leaderboards,
+    modifier: Modifier = Modifier
+) {
+    val matchDataMap = mapOf(
+        "Ranked Solo" to leaderboards.rmSolo,
+        "Ranked Team" to leaderboards.rmTeam,
+        "Ranked Team 2v2" to leaderboards.rm2v2Elo,
+        "Ranked Team 3v3" to leaderboards.rm3v3Elo,
+        "Ranked Team 4v4" to leaderboards.rm4v4Elo,
+        "Quick match Solo" to leaderboards.qm1v1,
+        "Quick match 2v2" to leaderboards.qm2v2,
+        "Quick match 3v3" to leaderboards.qm3v3,
+        "Quick match 4v4" to leaderboards.qm4v4
+    )
+
+    val noData = matchDataMap.all { it.value == null }
+    val dataList = matchDataMap.entries.toList()
+
+    if (noData) {
+        NoPlayersFoundBox(
+            R.string.no_match_data,
+            Modifier.fillMaxSize()
+        )
+    } else {
+        LazyColumn(
+            verticalArrangement = Arrangement
+                .spacedBy(dimensionResource(id = R.dimen.player_list_spacing)),
+            modifier = modifier
+        ) {
+            items(dataList) { entry ->
+                entry.value?.let { matchData ->
+                    MatchDataCard(matchTypeName = entry.key, matchData = matchData)
+                }
             }
         }
     }
@@ -177,10 +222,13 @@ fun ErrorBox(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun NoPlayersFoundBox(modifier: Modifier = Modifier) {
+fun NoPlayersFoundBox(
+    @StringRes messageResource: Int,
+    modifier: Modifier = Modifier
+) {
     CenteredBox(modifier = modifier) {
         Text(
-            text = stringResource(R.string.no_players_found),
+            text = stringResource(messageResource),
             style = MaterialTheme.typography.titleMedium
         )
     }

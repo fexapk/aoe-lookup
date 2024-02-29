@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -13,36 +14,35 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.fexapk.aoelookup.R
-import com.fexapk.aoelookup.model.MatchInfo
+import com.fexapk.aoelookup.model.MatchData
 import com.fexapk.aoelookup.ui.theme.AoeLookUpTheme
 
 @Composable
-fun MatchInfoCard(
-    matchInfo: MatchInfo,
+fun MatchDataCard(
     matchTypeName: String,
+    matchData: MatchData,
     modifier: Modifier = Modifier
 ) {
     OutlinedCard {
 
         val firstColumnMap = mapOf(
-            R.string.rating to matchInfo.rating.toString(),
-            R.string.rank to matchInfo.rank.toString(),
-            R.string.streak to matchInfo.streak.toString(),
-            R.string.season to matchInfo.season.toString(),
+            R.string.rating to matchData.rating.toString(),
+            R.string.rank to matchData.rank.toString(),
+            R.string.streak to matchData.streak.toString(),
+            R.string.season to matchData.season.toString(),
         )
         val secondColumnMap = mapOf(
-            R.string.games to matchInfo.gamesCount.toString(),
-            R.string.wins to matchInfo.winsCount.toString(),
-            R.string.loses to matchInfo.lossesCount.toString(),
-            R.string.win_rate to matchInfo.winRate.toString(),
+            R.string.games to matchData.gamesCount.toString(),
+            R.string.wins to matchData.winsCount.toString(),
+            R.string.loses to matchData.lossesCount.toString(),
+            R.string.win_rate to matchData.winRate.toString(),
         )
 
         Column(
@@ -50,18 +50,16 @@ fun MatchInfoCard(
         ) {
             Text(
                 text = matchTypeName,
-                style = MaterialTheme.typography.titleMedium
+                modifier = Modifier.fillMaxWidth(),
+                style = MaterialTheme.typography.titleMedium,
+                textAlign = TextAlign.Center
             )
-            Divider(
-                color = Color.Black,
-                modifier = Modifier
-                    .width(200.dp)
-                    .padding(top = 4.dp, bottom = 4.dp),
-                thickness = 2.dp
-            )
+            Divider(modifier = Modifier.padding(bottom = 4.dp, top = 2.dp))
             Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(4.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(4.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 InformationColumn(nameDataMap = firstColumnMap)
                 Spacer(modifier = Modifier.width(14.dp))
@@ -83,7 +81,9 @@ fun InformationColumn(
             (key,value) -> InformationRow(
                 nameResource = key,
                 data = value,
+                modifier = Modifier.width(120.dp)
             )
+            Spacer(Modifier.height(2.dp))
         }
     }
 }
@@ -101,23 +101,21 @@ fun InformationRow(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            stringResource(nameResource),
-            modifier = Modifier.width(60.dp),
-            style = MaterialTheme.typography.labelLarge
+            text = stringResource(nameResource),
+            style = MaterialTheme.typography.bodyLarge,
         )
-        Spacer(Modifier.width(6.dp))
         Text(
             text = data,
-            style = MaterialTheme.typography.labelLarge
+            style = MaterialTheme.typography.bodyLarge,
         )
     }
 }
 
 @Preview
 @Composable
-fun MatchInfoCardPreview() {
+fun MatchDataCardPreview() {
     AoeLookUpTheme {
-        val rmSolo = MatchInfo(
+        val rmSolo = MatchData(
             rating = 900,
             rank = 123,
             rankLevel = "conqueror_3",
@@ -130,8 +128,8 @@ fun MatchInfoCardPreview() {
             season = 6
         )
 
-        MatchInfoCard(
-            matchInfo = rmSolo,
+        MatchDataCard(
+            matchData = rmSolo,
             matchTypeName = "Ranked Solo",
             modifier = Modifier.padding(dimensionResource(R.dimen.medium_card_padding))
         )

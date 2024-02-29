@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.sp
 import com.fexapk.aoelookup.R
 import com.fexapk.aoelookup.data.RankDrawable
 import com.fexapk.aoelookup.model.Leaderboards
-import com.fexapk.aoelookup.model.MatchInfo
+import com.fexapk.aoelookup.model.MatchData
 import com.fexapk.aoelookup.model.Player
 import com.fexapk.aoelookup.ui.theme.AoeLookUpTheme
 
@@ -73,7 +73,7 @@ fun PlayerCard(
 fun RankedIcon(player: Player) {
 
     val isSystemDark = isSystemInDarkTheme()
-    val rmSoloInfo: MatchInfo? = player.leaderboards.rmSolo
+    val rmSoloInfo: MatchData? = player.leaderboards.rmSolo
     val rankLevel: String? = rmSoloInfo?.rankLevel
     val unrankedRes = if (isSystemDark) R.drawable.no_rank_white else R.drawable.no_rank
 
@@ -136,7 +136,7 @@ fun PlayerInformation(
 fun PlayerCardPreview() {
     AoeLookUpTheme {
         val leaderboards = Leaderboards(
-            rmSolo = MatchInfo(
+            rmSolo = MatchData(
                 rating = 900,
                 rank = 123,
                 rankLevel = "conqueror_3",
