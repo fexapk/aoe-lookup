@@ -26,7 +26,7 @@ enum class UiState {
 sealed interface UiState {
     data class Success(val players: List<Player>) : UiState
 
-    data class PlayerFocus(val player: Player) : UiState
+    // data class PlayerFocus(val player: Player) : UiState
     object Error : UiState
     object Loading : UiState
     object Home : UiState
@@ -41,6 +41,10 @@ class AoeViewModel : ViewModel() {
 
      fun searchPlayers(username: String) {
          searchJob?.cancel()
+         if (username.isBlank()) {
+             uiState = UiState.Home
+             return
+         }
          searchJob = viewModelScope.launch {
             uiState = UiState.Loading
              try {
@@ -57,8 +61,10 @@ class AoeViewModel : ViewModel() {
          }
     }
 
+    /**
     fun focusPlayer(player: Player) {
        uiState = UiState.PlayerFocus(player)
     }
+    **/
 
 }

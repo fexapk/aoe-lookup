@@ -2,5 +2,5 @@
 <resources>
     <dimen name="small_spacer_height">2dp</dimen>
     <dimen name="medium_card_padding">8dp</dimen>
-    <dimen name="player_list_spacing">4dp</dimen>
+    <dimen name="list_spacing">4dp</dimen>
 </resources>

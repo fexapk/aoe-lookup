@@ -66,11 +66,11 @@ fun SearchScreen(modifier: Modifier = Modifier) {
             is UiState.Home -> HomeBox(boxModifier)
             is UiState.Error -> ErrorBox(boxModifier)
             is UiState.Loading -> LoadingBox(boxModifier)
-            is UiState.PlayerFocus -> MatchDataList(currentState.player.leaderboards)
+            // is UiState.PlayerFocus -> MatchDataList(currentState.player.leaderboards)
             is UiState.Success -> PlayerList(
                 players = currentState.players,
                 cardOnClick = {
-                    viewModel.focusPlayer(it)
+                    // viewModel.focusPlayer(it)
                 }
             )
         }
@@ -112,9 +112,9 @@ fun PlayerList(
         )
     } else {
         LazyColumn(
+            modifier = modifier,
             verticalArrangement = Arrangement
-                .spacedBy(dimensionResource(id = R.dimen.player_list_spacing)),
-            modifier = modifier
+                .spacedBy(dimensionResource(id = R.dimen.list_spacing))
         ) {
             items(players) { player ->
                 PlayerCard(
@@ -159,7 +159,7 @@ fun MatchDataList(
     } else {
         LazyColumn(
             verticalArrangement = Arrangement
-                .spacedBy(dimensionResource(id = R.dimen.player_list_spacing)),
+                .spacedBy(dimensionResource(id = R.dimen.list_spacing)),
             modifier = modifier
         ) {
             items(dataList) { entry ->
