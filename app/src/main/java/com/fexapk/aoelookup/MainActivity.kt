@@ -9,7 +9,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.fexapk.aoelookup.screens.SearchScreen
+import com.fexapk.aoelookup.ui.AoeApp
+import com.fexapk.aoelookup.ui.AoeLookupApp
+import com.fexapk.aoelookup.ui.SearchScreen
 import com.fexapk.aoelookup.ui.theme.AoeLookUpTheme
 
 class MainActivity : ComponentActivity() {
@@ -22,7 +24,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    SearchScreen(Modifier.fillMaxSize().padding(12.dp))
+                    AoeLookupApp()
                 }
             }
         }

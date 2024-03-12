@@ -1,7 +1,8 @@
-package com.fexapk.aoelookup.screens
+package com.fexapk.aoelookup.ui
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -32,12 +33,13 @@ sealed interface UiState {
     object Home : UiState
 }
 
-class AoeViewModel : ViewModel() {
+class SearchViewModel : ViewModel() {
 
     private val playerRepository: PlayerRepository = NetworkPlayerRepository
     private var searchJob: Job? = null
 
     var uiState: UiState by mutableStateOf(UiState.Home)
+    lateinit var selectedPlayer: Player
 
      fun searchPlayers(username: String) {
          searchJob?.cancel()

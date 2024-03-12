@@ -1,4 +1,4 @@
-package com.fexapk.aoelookup.screens
+package com.fexapk.aoelookup.ui
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement

@@ -1,4 +1,4 @@
-package com.fexapk.aoelookup.screens
+package com.fexapk.aoelookup.ui
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -38,13 +38,14 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.fexapk.aoelookup.R
-import com.fexapk.aoelookup.model.Leaderboards
 import com.fexapk.aoelookup.model.Player
 
 @Composable
-fun SearchScreen(modifier: Modifier = Modifier) {
-
-    val viewModel = remember { AoeViewModel() }
+fun SearchScreen(
+    viewModel: SearchViewModel,
+    modifier: Modifier = Modifier,
+    onPlayerCardClick: (Player) -> Unit = {}
+) {
     val currentState = viewModel.uiState
 
     var playerQuery by remember { mutableStateOf("") }
@@ -66,11 +67,10 @@ fun SearchScreen(modifier: Modifier = Modifier) {
             is UiState.Home -> HomeBox(boxModifier)
             is UiState.Error -> ErrorBox(boxModifier)
             is UiState.Loading -> LoadingBox(boxModifier)
-            // is UiState.PlayerFocus -> MatchDataList(currentState.player.leaderboards)
             is UiState.Success -> PlayerList(
                 players = currentState.players,
                 cardOnClick = {
-                    // viewModel.focusPlayer(it)
+                    onPlayerCardClick(it)
                 }
             )
         }
@@ -131,45 +131,6 @@ fun PlayerList(
     }
 }
 
-@Composable
-fun MatchDataList(
-    leaderboards: Leaderboards,
-    modifier: Modifier = Modifier
-) {
-    val matchDataMap = mapOf(
-        "Ranked Solo" to leaderboards.rmSolo,
-        "Ranked Team" to leaderboards.rmTeam,
-        "Ranked Team 2v2" to leaderboards.rm2v2Elo,
-        "Ranked Team 3v3" to leaderboards.rm3v3Elo,
-        "Ranked Team 4v4" to leaderboards.rm4v4Elo,
-        "Quick match Solo" to leaderboards.qm1v1,
-        "Quick match 2v2" to leaderboards.qm2v2,
-        "Quick match 3v3" to leaderboards.qm3v3,
-        "Quick match 4v4" to leaderboards.qm4v4
-    )
-
-    val noData = matchDataMap.all { it.value == null }
-    val dataList = matchDataMap.entries.toList()
-
-    if (noData) {
-        NoPlayersFoundBox(
-            R.string.no_match_data,
-            Modifier.fillMaxSize()
-        )
-    } else {
-        LazyColumn(
-            verticalArrangement = Arrangement
-                .spacedBy(dimensionResource(id = R.dimen.list_spacing)),
-            modifier = modifier
-        ) {
-            items(dataList) { entry ->
-                entry.value?.let { matchData ->
-                    MatchDataCard(matchTypeName = entry.key, matchData = matchData)
-                }
-            }
-        }
-    }
-}
 
 @Composable
 fun CenteredBox(modifier: Modifier = Modifier, content: @Composable () -> Unit) {

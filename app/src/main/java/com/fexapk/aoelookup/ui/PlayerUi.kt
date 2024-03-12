@@ -1,4 +1,4 @@
-package com.fexapk.aoelookup.screens
+package com.fexapk.aoelookup.ui
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween

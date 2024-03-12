@@ -12,4 +12,7 @@
     <string name="loses">loses</string>
     <string name="win_rate">win rate</string>
     <string name="card_info_divider">-</string>
+    <string name="search_screen_title">Search</string>
+    <string name="player_stats_screen_title">Player Stats</string>
+    <string name="back_button_text">Back</string>
 </resources>

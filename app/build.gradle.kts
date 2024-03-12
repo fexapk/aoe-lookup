@@ -72,6 +72,9 @@ dependencies {
     // Accompanist
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.32.0")
 
+    // Navigation
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+
     // Meine end
 
     testImplementation("junit:junit:4.13.2")
