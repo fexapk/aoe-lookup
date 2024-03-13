@@ -1,15 +1,17 @@
-package com.fexapk.aoelookup.ui
+package com.fexapk.aoelookup.ui.screens
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.fexapk.aoelookup.R
+import com.fexapk.aoelookup.ui.SearchViewModel
 
 enum class AoeApp {
     Search,
@@ -18,7 +20,7 @@ enum class AoeApp {
 
 @Composable
 fun AoeLookupApp(
-    viewModel: SearchViewModel = SearchViewModel(),
+    viewModel: SearchViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
     NavHost(

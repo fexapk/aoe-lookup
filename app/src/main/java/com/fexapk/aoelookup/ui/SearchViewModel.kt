@@ -5,15 +5,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fexapk.aoelookup.data.NetworkPlayerRepository
 import com.fexapk.aoelookup.data.PlayerRepository
 import com.fexapk.aoelookup.model.Player
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
+import javax.inject.Inject
 
 /**
 enum class UiState {
@@ -33,9 +34,11 @@ sealed interface UiState {
     object Home : UiState
 }
 
-class SearchViewModel : ViewModel() {
+@HiltViewModel
+class SearchViewModel @Inject constructor(
+    val playerRepository: PlayerRepository
+) : ViewModel() {
 
-    private val playerRepository: PlayerRepository = NetworkPlayerRepository
     private var searchJob: Job? = null
 
     var uiState: UiState by mutableStateOf(UiState.Home)

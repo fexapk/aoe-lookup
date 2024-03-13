@@ -1,4 +1,4 @@
-package com.fexapk.aoelookup.ui
+package com.fexapk.aoelookup.ui.screens
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -39,6 +39,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.fexapk.aoelookup.R
 import com.fexapk.aoelookup.model.Player
+import com.fexapk.aoelookup.ui.PlayerCard
+import com.fexapk.aoelookup.ui.SearchViewModel
+import com.fexapk.aoelookup.ui.UiState
 
 @Composable
 fun SearchScreen(

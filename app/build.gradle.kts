@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.dagger.hilt.android")
+    kotlin("kapt")
 }
 
 android {
@@ -75,6 +77,11 @@ dependencies {
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.7.7")
 
+    // Dagger Hilt
+    implementation("com.google.dagger:hilt-android:2.51")
+    kapt("com.google.dagger:hilt-android-compiler:2.51")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+
     // Meine end
 
     testImplementation("junit:junit:4.13.2")
@@ -85,4 +92,9 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+}
+
+// allow references to generate code
+kapt {
+    correctErrorTypes = true
 }
