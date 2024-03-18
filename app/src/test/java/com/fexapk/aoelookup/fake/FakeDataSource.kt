@@ -32,6 +32,7 @@ object FakeDataSource {
     )
 
     val playerList = listOf(player)
+    val emptyPlayerList = listOf<Player>()
 
     fun getResponse(): PlayerResponse {
         return PlayerResponse(playerList)
