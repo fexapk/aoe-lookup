@@ -27,7 +27,7 @@ internal object SearchViewModelModule {
             .build()
 
         return NetworkPlayerRepository(
-            retrofitService = retrofit.create(AoeApiService::class.java)
+            service = retrofit.create(AoeApiService::class.java)
         )
     }
 }

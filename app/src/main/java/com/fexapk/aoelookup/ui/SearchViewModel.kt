@@ -16,15 +16,6 @@ import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
-/**
-enum class UiState {
-    SUCCESS,
-    ERROR,
-    LOADING,
-    HOME
-}
-**/
-
 sealed interface UiState {
     data class Success(val players: List<Player>) : UiState
 
@@ -45,11 +36,10 @@ class SearchViewModel @Inject constructor(
     lateinit var selectedPlayer: Player
 
      fun searchPlayers(username: String) {
+
          searchJob?.cancel()
-         if (username.isBlank()) {
-             uiState = UiState.Home
-             return
-         }
+         if (isUsernameBlank(username)) return
+
          searchJob = viewModelScope.launch {
             uiState = UiState.Loading
              try {
@@ -65,6 +55,15 @@ class SearchViewModel @Inject constructor(
              }
          }
     }
+
+    private fun isUsernameBlank(query: String): Boolean {
+        if (query.isBlank()) {
+            uiState = UiState.Home
+            return true
+        }
+        return false
+    }
+
 
     /**
     fun focusPlayer(player: Player) {

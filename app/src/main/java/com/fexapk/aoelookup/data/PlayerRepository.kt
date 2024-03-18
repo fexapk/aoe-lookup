@@ -8,11 +8,11 @@ interface PlayerRepository {
 }
 
 class NetworkPlayerRepository(
-    val retrofitService: AoeApiService
+    val service: AoeApiService
 ) : PlayerRepository {
 
     override suspend fun searchPlayers(name: String): List<Player> {
-        return retrofitService.searchPlayers(name).players
+        return service.searchPlayers(name).players
     }
 
 }
