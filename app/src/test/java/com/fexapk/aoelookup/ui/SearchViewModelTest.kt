@@ -4,16 +4,20 @@ import com.fexapk.aoelookup.data.PlayerRepository
 import com.fexapk.aoelookup.fake.FakeDataSource
 import com.fexapk.aoelookup.rules.MainDispatcherRule
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
+import okhttp3.MediaType
+import okhttp3.ResponseBody
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import retrofit2.HttpException
+import retrofit2.Response
+import java.io.IOException
 
 class SearchViewModelTest {
 
@@ -22,6 +26,7 @@ class SearchViewModelTest {
 
     private lateinit var searchViewModel: SearchViewModel
     private lateinit var mockPlayerRepository: PlayerRepository
+    private val usernameQuery = "Player"
 
     @Before
     fun setUp() {
@@ -35,10 +40,9 @@ class SearchViewModelTest {
     @Test
     fun searchViewModel_searchPlayers_successfulStateWhenPlayerResponseIsReceivedAndLoadingStateBeforeResults() =
         runTest {
-            coEvery { mockPlayerRepository.searchPlayers("Player") } returns FakeDataSource.playerList
-            val username = "Player"
+            coEvery { mockPlayerRepository.searchPlayers(usernameQuery) } returns FakeDataSource.playerList
 
-            searchViewModel.searchPlayers(username)
+            searchViewModel.searchPlayers(usernameQuery)
             advanceTimeBy(300L) // Debounce time
 
             assertEquals(UiState.Loading, searchViewModel.uiState)
@@ -51,8 +55,10 @@ class SearchViewModelTest {
     @Test
     fun searchViewModel_searchPlayers_whenUserNameQueryIsEmptyUiStateIsHome() =
         runTest {
-            coEvery { mockPlayerRepository.searchPlayers("") } returns FakeDataSource.emptyPlayerList
             val username = ""
+            coEvery {
+                mockPlayerRepository.searchPlayers(username)
+            } returns FakeDataSource.emptyPlayerList
 
             searchViewModel.searchPlayers(username)
             advanceTimeBy(300L)
@@ -61,4 +67,40 @@ class SearchViewModelTest {
             assertEquals(UiState.Home, searchViewModel.uiState)
         }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun searchViewModel_searchPlayers_whenIOExceptionIsThrownUiStateIsError() =
+        runTest {
+            coEvery {
+                mockPlayerRepository.searchPlayers(usernameQuery)
+            } throws IOException()
+
+            searchViewModel.searchPlayers(usernameQuery)
+            advanceTimeBy(300L)
+            advanceUntilIdle()
+
+
+            assertEquals(UiState.Error, searchViewModel.uiState)
+        }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun searchViewModel_searchPlayers_whenHttpExceptionIsThrownUiStateIsError() =
+        runTest {
+            val fakeHttpException = HttpException(
+                Response.error<ResponseBody>(
+                    404,
+                    ResponseBody.create(MediaType.parse("plain/text"), "some content")
+                )
+            )
+            coEvery {
+                mockPlayerRepository.searchPlayers(usernameQuery)
+            } throws fakeHttpException
+
+            searchViewModel.searchPlayers(usernameQuery)
+            advanceTimeBy(300L)
+            advanceUntilIdle()
+
+            assertEquals(UiState.Error, searchViewModel.uiState)
+        }
 }
