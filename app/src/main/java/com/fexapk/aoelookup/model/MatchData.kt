@@ -11,5 +11,6 @@ data class MatchData(
     @SerializedName("wins_count")     val winsCount: Int,
     @SerializedName("losses_count")   val lossesCount: Int,
     @SerializedName("last_game_at")   val lastGameAt: String,
-    @SerializedName("win_rate")       val winRate: Double
+    @SerializedName("win_rate")       val winRate: Double,
+    @SerializedName("previous_seasons") val previousSeasons: List<MatchData>?
 )

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
@@ -73,8 +74,13 @@ fun PlayerCard(
 fun RankedIcon(player: Player) {
 
     val isSystemDark = isSystemInDarkTheme()
-    val rmSoloInfo: MatchData? = player.leaderboards.rmSolo
-    val rankLevel: String? = rmSoloInfo?.rankLevel
+    val rmSolo: MatchData? = player.leaderboards.rmSolo
+    var rankLevel: String? = rmSolo?.rankLevel ?: "unranked"
+
+    if (rankLevel == "unranked" && rmSolo?.previousSeasons != null) {
+        rankLevel = rmSolo.previousSeasons.first().rankLevel
+    }
+
     val unrankedRes = if (isSystemDark) R.drawable.no_rank_white else R.drawable.no_rank
 
     val drawableRes: Int = RankDrawable.getRankDrawable(rankLevel) ?: unrankedRes
@@ -97,27 +103,35 @@ fun PlayerInformation(
     player: Player,
     modifier: Modifier = Modifier
 ) {
+    
+    val rmSolo: MatchData? = player.leaderboards.rmSolo
+    
+    var rank = rmSolo?.rank ?: 0
+    var season = rmSolo?.season ?: 0
 
-    fun getEmojiFromIsoCountryCode(isoCode: String?): String {
 
-        if (isoCode == null) return "\u2753"
-
-        val upperCaseCode = isoCode.uppercase()
-        val firstLetter = Character.codePointAt(upperCaseCode, 0) - 0x41 + 0x1F1E6
-        val secondLetter = Character.codePointAt(upperCaseCode, 1) - 0x41 + 0x1F1E6
-        return String(Character.toChars(firstLetter)) + String(Character.toChars(secondLetter))
+    if (rank == 0 && rmSolo?.previousSeasons != null) {
+        rank = rmSolo.previousSeasons.first().rank
+        season = rmSolo.previousSeasons.first().season
     }
-
-    val rank = player.leaderboards.rmSolo?.rank ?: 0
 
     Column(
         verticalArrangement = Arrangement.Center,
         modifier = modifier
     ) {
-        Text(
-            text = player.name,
-            style = MaterialTheme.typography.titleMedium
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = player.name,
+                style = MaterialTheme.typography.titleMedium
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = getEmojiFromIsoCountryCode(player.country),
+                fontSize = 12.sp
+            )
+        }
         Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.small_spacer_height)))
         Text(
             text = stringResource(id = R.string.player_rank, rank),
@@ -125,10 +139,20 @@ fun PlayerInformation(
         )
         Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.small_spacer_height)))
         Text(
-            text = getEmojiFromIsoCountryCode(player.country),
-            fontSize = 12.sp
+            text = stringResource(id = R.string.leader_board_season, season),
+            style = MaterialTheme.typography.bodySmall
         )
     }
+}
+
+fun getEmojiFromIsoCountryCode(isoCode: String?): String {
+
+    if (isoCode == null) return "\u2753"
+
+    val upperCaseCode = isoCode.uppercase()
+    val firstLetter = Character.codePointAt(upperCaseCode, 0) - 0x41 + 0x1F1E6
+    val secondLetter = Character.codePointAt(upperCaseCode, 1) - 0x41 + 0x1F1E6
+    return String(Character.toChars(firstLetter)) + String(Character.toChars(secondLetter))
 }
 
 @Preview
@@ -146,7 +170,8 @@ fun PlayerCardPreview() {
                 lossesCount = 20,
                 lastGameAt = "2024-01-31T18:30:00.000Z",
                 winRate = 60.0,
-                season = 6
+                season = 6,
+                previousSeasons = null
             )
         )
         val player =  Player(
@@ -160,7 +185,9 @@ fun PlayerCardPreview() {
 
         PlayerCard(
             player = player,
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier
+                .width(300.dp)
+                .padding(8.dp)
         )
     }
 }
@@ -176,11 +203,13 @@ fun PlayerNoRankPreview() {
         steamId = "765611987654321",
         country = "us",
         lastGameAt = "2024-02-03T12:45:00.000Z",
-        leaderboards = leaderboards
+        leaderboards = leaderboards,
     )
     PlayerCard(
         player = player,
-        modifier = Modifier.padding(8.dp)
+        modifier = Modifier
+            .width(300.dp)
+            .padding(8.dp)
     )
 }
 

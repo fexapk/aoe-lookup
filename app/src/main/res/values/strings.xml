@@ -3,6 +3,7 @@
     <string name="no_players_found">No Players Found</string>
     <string name="no_match_data">No Match Data</string>
     <string name="player_rank">rank: %s</string>
+    <string name="leader_board_season">season: %s</string>
     <string name="rating">rating</string>
     <string name="rank">rank</string>
     <string name="streak">streak</string>

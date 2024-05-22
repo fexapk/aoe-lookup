@@ -125,7 +125,8 @@ fun MatchDataCardPreview() {
             lossesCount = 20,
             lastGameAt = "2024-01-31T18:30:00.000Z",
             winRate = 60.0,
-            season = 6
+            season = 6,
+            previousSeasons = null
         )
 
         MatchDataCard(
